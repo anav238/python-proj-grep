@@ -9,17 +9,22 @@ filename = sys.argv[2]
 options = sys.argv[3:]
 pattern = pattern.replace("\"", "")
 if '-v' in options:
-    pattern = "(?!" + pattern + ")"
+    pattern = "^((?!" + pattern + ").)*$"
 
 text_file = open(filename, 'r')
 text = text_file.readlines()
 
 matches = []
-reg = re.compile(pattern)
+
+if '-ignoreCase' in options:
+    reg = re.compile(pattern, re.IGNORECASE)
+else:
+    reg = re.compile(pattern)
+
 for line in text:
     line = line.replace("\n", "")
-    match = reg.match(line)
-    if match is not None and (line == match.group() or '-v' in options):
+    match = reg.search(line)
+    if match is not None:
         print(line)
 
 text_file.close()
