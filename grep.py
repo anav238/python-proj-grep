@@ -14,7 +14,7 @@ def processFile(file):
             matched_lines.append(line)
 
     if '-count' in options:
-        print(file + " " + len(matched_lines))
+        print(file + " " + str(len(matched_lines)))
     else:
         for line in matched_lines:
             print(file + " " + line)
@@ -36,16 +36,23 @@ if len(sys.argv) < 3:
     raise ValueError("Wrong format! Correct format is: grep.py PATTERNS FILE [OPTION...]")
 
 pattern = sys.argv[1]
+pattern = pattern.replace("\"", "")
+
 path = sys.argv[2]
 filename = sys.argv[2]
+
 options = sys.argv[3:]
-pattern = pattern.replace("\"", "")
+lowercase_options = []
+for option in options:
+    lowercase_options.append(option.lower())
+options = lowercase_options
+
 if '-v' in options:
     pattern = "^((?!" + pattern + ").)*$"
 
 matches = []
 
-if '-ignoreCase' in options:
+if '-ignorecase' in options:
     reg = re.compile(pattern, re.IGNORECASE)
 else:
     reg = re.compile(pattern)
