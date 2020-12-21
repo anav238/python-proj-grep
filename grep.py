@@ -21,10 +21,17 @@ if '-ignoreCase' in options:
 else:
     reg = re.compile(pattern)
 
+matched_lines = []
 for line in text:
     line = line.replace("\n", "")
     match = reg.search(line)
     if match is not None:
+        matched_lines.append(line)
+
+if '-count' in options:
+    print(len(matched_lines))
+else:
+    for line in matched_lines:
         print(line)
 
 text_file.close()
